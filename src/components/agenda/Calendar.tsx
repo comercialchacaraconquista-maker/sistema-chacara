@@ -288,31 +288,32 @@ export default function Calendar() {
     };
 
     const renderHeader = () => (
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 lg:mb-8">
             <div>
-                <h2 className="text-2xl font-bold text-slate-800 capitalize">
+                <h2 className="text-xl lg:text-2xl font-bold text-slate-800 capitalize">
                     {format(currentMonth, 'MMMM yyyy', { locale: ptBR })}
                 </h2>
-                <p className="text-slate-500">Gerencie suas reservas e disponibilidades</p>
+                <p className="text-xs lg:text-sm text-slate-500">Gerencie suas reservas e disponibilidades</p>
             </div>
-            <div className="flex items-center gap-2">
-                <div className="flex bg-white border border-slate-200 rounded-lg p-1 mr-4">
-                    <button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} aria-label="Mês anterior" className="p-2 hover:bg-slate-50 rounded-md transition-all text-slate-600">
-                        <ChevronLeft className="w-5 h-5" />
+            <div className="flex flex-wrap items-center gap-2">
+                <div className="flex bg-white border border-slate-200 rounded-lg p-1">
+                    <button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} aria-label="Mês anterior" className="p-1.5 lg:p-2 hover:bg-slate-50 rounded-md transition-all text-slate-600">
+                        <ChevronLeft className="w-4 h-4 lg:w-5 lg:h-5" />
                     </button>
-                    <button onClick={() => setCurrentMonth(new Date())} className="px-3 py-1 hover:bg-slate-50 rounded-md transition-all text-sm font-medium text-slate-600 border-x border-slate-100 mx-1">
+                    <button onClick={() => setCurrentMonth(new Date())} className="px-2 lg:px-3 py-1 hover:bg-slate-50 rounded-md transition-all text-xs lg:text-sm font-medium text-slate-600 border-x border-slate-100 mx-1">
                         Hoje
                     </button>
-                    <button onClick={() => setCurrentMonth(addMonths(currentMonth, 1))} aria-label="Próximo mês" className="p-2 hover:bg-slate-50 rounded-md transition-all text-slate-600">
-                        <ChevronRight className="w-5 h-5" />
+                    <button onClick={() => setCurrentMonth(addMonths(currentMonth, 1))} aria-label="Próximo mês" className="p-1.5 lg:p-2 hover:bg-slate-50 rounded-md transition-all text-slate-600">
+                        <ChevronRight className="w-4 h-4 lg:w-5 lg:h-5" />
                     </button>
                 </div>
                 <button
-                    className="btn-primary"
+                    className="btn-primary py-2 px-3 text-xs lg:text-sm flex-1 md:flex-none justify-center"
                     onClick={() => setIsModalOpen(true)}
                 >
                     <Plus className="w-4 h-4" />
-                    <span>Nova Venda / Reserva</span>
+                    <span className="hidden sm:inline">Nova Reserva</span>
+                    <span className="sm:hidden">Nova</span>
                 </button>
             </div>
         </div>
@@ -320,11 +321,13 @@ export default function Calendar() {
 
     const renderDays = () => {
         const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+        const daysShort = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
         return (
-            <div className="grid grid-cols-7 mb-2">
+            <div className="grid grid-cols-7 mb-1 lg:mb-2">
                 {days.map((day, index) => (
-                    <div key={index} className="text-center text-xs font-bold text-slate-400 uppercase tracking-widest pb-4">
-                        {day}
+                    <div key={index} className="text-center text-[10px] lg:text-xs font-bold text-slate-400 uppercase tracking-widest pb-2 lg:pb-4">
+                        <span className="hidden sm:inline">{day}</span>
+                        <span className="sm:hidden">{daysShort[index]}</span>
                     </div>
                 ))}
             </div>
@@ -357,30 +360,37 @@ export default function Calendar() {
                 days.push(
                     <div
                         key={day.toString()}
-                        className={`min-h-[120px] p-2 border-r border-b border-slate-100 relative group transition-all cursor-pointer overflow-hidden ${!isCurrentMonth ? 'bg-slate-50/50' : 'bg-white'
+                        className={`min-h-[60px] lg:min-h-[120px] p-1 lg:p-2 border-r border-b border-slate-100 relative group transition-all cursor-pointer overflow-hidden ${!isCurrentMonth ? 'bg-slate-50/50' : 'bg-white'
                             } ${isSelected ? 'ring-2 ring-primary-500 ring-inset z-10' : 'hover:bg-slate-50'}`}
                         onClick={() => setSelectedDate(date)}
                     >
-                        <div className="flex justify-between items-start mb-2">
-                            <span className={`text-sm font-semibold rounded-full w-7 h-7 flex items-center justify-center ${isToday ? 'bg-primary-600 text-white' : isCurrentMonth ? 'text-slate-800' : 'text-slate-300'
+                        <div className="flex justify-between items-start mb-1 lg:mb-2">
+                            <span className={`text-xs lg:text-sm font-semibold rounded-full w-5 h-5 lg:w-7 lg:h-7 flex items-center justify-center ${isToday ? 'bg-primary-600 text-white' : isCurrentMonth ? 'text-slate-800' : 'text-slate-300'
                                 }`}>
                                 {formattedDate}
                             </span>
                         </div>
 
                         {event && (
-                            <div className={`mt-1 p-2 rounded-lg text-xs font-medium border animate-slide-up ${event.status === 'Confirmado'
-                                ? 'bg-primary-50 text-primary-700 border-primary-100'
-                                : event.status === 'Orçamento'
-                                    ? 'bg-amber-50 text-amber-700 border-amber-100'
-                                    : 'bg-slate-50 text-slate-700 border-slate-100'
-                                }`}>
-                                <p className="font-bold truncate">{event.title}</p>
-                                <div className="flex items-center justify-between mt-1 opacity-80">
-                                    <span className="font-bold text-[10px] uppercase">{event.status}</span>
-                                    <span className="font-bold">R$ {calculateTotal(event).toLocaleString()}</span>
+                            <>
+                                {/* Desktop View */}
+                                <div className={`hidden lg:block mt-1 p-2 rounded-lg text-xs font-medium border animate-slide-up ${event.status === 'Confirmado'
+                                    ? 'bg-primary-50 text-primary-700 border-primary-100'
+                                    : event.status === 'Orçamento'
+                                        ? 'bg-amber-50 text-amber-700 border-amber-100'
+                                        : 'bg-slate-50 text-slate-700 border-slate-100'
+                                    }`}>
+                                    <p className="font-bold truncate">{event.title}</p>
+                                    <div className="flex items-center justify-between mt-1 opacity-80">
+                                        <span className="font-bold text-[10px] uppercase">{event.status}</span>
+                                        <span className="font-bold">R$ {calculateTotal(event).toLocaleString()}</span>
+                                    </div>
                                 </div>
-                            </div>
+                                {/* Mobile View (Indicator Dot) */}
+                                <div className={`lg:hidden flex justify-center mt-1`}>
+                                    <div className={`w-2 h-2 rounded-full ${event.status === 'Confirmado' ? 'bg-primary-500' : 'bg-amber-500'}`} />
+                                </div>
+                            </>
                         )}
                     </div>
                 );
