@@ -56,7 +56,7 @@ export default function Clients() {
                 <div><h2 className="text-2xl font-bold text-slate-800">Clientes</h2><p className="text-slate-500">Gerencie sua base de clientes</p></div>
                 <button
                     className="btn-primary"
-                    onClick={() => alert('Abrindo formulário de Novo Cliente...')}
+                    onClick={handleAddClient}
                 >
                     <Plus className="w-4 h-4" />
                     <span>Cadastrar Cliente</span>

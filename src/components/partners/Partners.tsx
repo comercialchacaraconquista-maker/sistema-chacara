@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../services/api';
 import {
-    Users,
     Plus,
     Search,
     Filter,
@@ -13,8 +12,7 @@ import {
     Briefcase,
     Utensils,
     Music,
-    ShieldCheck,
-    Truck
+    ShieldCheck
 } from 'lucide-react';
 
 export default function Partners() {
